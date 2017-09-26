@@ -4,12 +4,9 @@ var util = require('util')
 var request = require("request");
 var express = require("express");
 var mongojs = require("mongojs");
-
+var mongoose = require("mongoose");
+var Article = require("../models/Article.js");
 var router = express.Router();
-
-// Database configuration
-var databaseUrl = "scraper";
-var collections = ["scrapedData"];
 
 // Hook mongojs configuration to the db variable
 var db = mongojs(databaseUrl, collections);
@@ -25,24 +22,19 @@ module.exports = function(app) {
 		request("https://nytimes.com/", function(error, response, html) {
 			var $ = cheerio.load(html);
 			$(".theme-summary").each(function(i, element) {
-				var title = $(element).children("h2").children("a").text();
-				var link = $(element).children("h2").children("a").attr("href");
-				var articleSummary = $(element).children(".summary").text()
-					if (title && link && articleSummary) {
-						db.scrapedData.insert({
-							title: title,
-							link: link,
-							articleSummary: articleSummary
-						},
-					function(err, inserted) {
-						if (err) {
-							console.log(err)
-						}
-						else {
-							console.log(inserted);
-						}
-						});
+				var result = {};
+				result.title = $(this).children("h2").children("a").text();
+				result.link = $(this).children("h2").children("a").attr("href");
+				result.summary = $(this).children(".summary").text()
+				var entry = new Article(result);
+				entry.save(function(err, doc) {
+					if (err) {
+						console.log(err);
 					}
+					else {
+						console.log(doc)
+					}
+				});
 			});
 		})
 		db.scrapedData.find({}, function(error,articles){
@@ -50,7 +42,7 @@ module.exports = function(app) {
 		})
 	});
 	app.get("/saved", function(req, res) {
-
+		res.render("home")
 	})
 	app.post("/", function(req, res) {
 		request("https://nytimes.com/", function(error, response, html) {
