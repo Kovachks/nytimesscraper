@@ -8,16 +8,6 @@ var Article = require("../models/Article.js");
 var router = express.Router();
 var mongojs = require("mongojs")
 
-// Database configuration
-var databaseUrl = "scraper";
-var collections = ["scrapedData"];
-
-// Hook mongojs configuration to the db variable
-var db = mongojs(databaseUrl, collections);
-db.on("error", function(error) {
-  console.log("Database Error:", error);
-});
-
 var session = require('express-session')
 
 module.exports = function(app) {
@@ -40,12 +30,10 @@ module.exports = function(app) {
 					}
 				});
 			});
-		}).then(function(result) {
-			res.render("home", {articles:result})
 		})
-		// db.scrapedData.find({}, function(error,articles){
-		// 	res.render("home", {articles:entry})
-		// })
+		Article.find({}, function(error,articles){
+			res.render("home", {articles:articles})
+		})
 	});
 	app.get("/saved", function(req, res) {
 		res.render("home")
