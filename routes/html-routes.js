@@ -42,7 +42,7 @@ module.exports = function(app) {
 			});
 		})
 		db.scrapedData.find({}, function(error,articles){
-			res.render("home", {articles:result})
+			res.render("home", {articles:entry})
 		})
 	});
 	app.get("/saved", function(req, res) {
