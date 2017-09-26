@@ -40,10 +40,12 @@ module.exports = function(app) {
 					}
 				});
 			});
+		}).then(function(result) {
+			res.render("home", {articles:result})
 		})
-		db.scrapedData.find({}, function(error,articles){
-			res.render("home", {articles:entry})
-		})
+		// db.scrapedData.find({}, function(error,articles){
+		// 	res.render("home", {articles:entry})
+		// })
 	});
 	app.get("/saved", function(req, res) {
 		res.render("home")
