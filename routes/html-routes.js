@@ -8,6 +8,10 @@ var mongoose = require("mongoose");
 var Article = require("../models/Article.js");
 var router = express.Router();
 
+// Database configuration
+var databaseUrl = "scraper";
+var collections = ["scrapedData"];
+
 // Hook mongojs configuration to the db variable
 var db = mongojs(databaseUrl, collections);
 db.on("error", function(error) {
