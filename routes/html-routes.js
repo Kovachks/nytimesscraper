@@ -3,7 +3,6 @@ var cheerio = require("cheerio");
 var util = require('util')
 var request = require("request");
 var express = require("express");
-var mongojs = require("mongojs");
 var mongoose = require("mongoose");
 var Article = require("../models/Article.js");
 var router = express.Router();
@@ -42,7 +41,7 @@ module.exports = function(app) {
 			});
 		})
 		db.scrapedData.find({}, function(error,articles){
-			res.render("home", {"articles":articles})
+			res.render("home", {result:articles})
 		})
 	});
 	app.get("/saved", function(req, res) {
