@@ -6,6 +6,7 @@ var express = require("express");
 var mongoose = require("mongoose");
 var Article = require("../models/Article.js");
 var router = express.Router();
+var mongojs = require("mongojs")
 
 // Database configuration
 var databaseUrl = "scraper";
@@ -47,34 +48,34 @@ module.exports = function(app) {
 	app.get("/saved", function(req, res) {
 		res.render("home")
 	})
-	app.post("/", function(req, res) {
-		request("https://nytimes.com/", function(error, response, html) {
-			var $ = cheerio.load(html);
-			$(".theme-summary").each(function(i, element) {
-				var title = $(element).children("h2").children("a").text();
-				var link = $(element).children("h2").children("a").attr("href");
-				var articleSummary = $(element).children(".summary").text()
-					if (title && link && articleSummary) {
-						db.scrapedData.insert({
-							title: title,
-							link: link,
-							articleSummary: articleSummary
-						},
-					function(err, inserted) {
-						if (err) {
-							console.log(err)
-						}
-						else {
-							console.log(inserted);
-						}
-						});
-					}
-			});
-		})
-		db.scrapedData.find({}, function(error,articles){
-			res.render("home", {"articles":articles})
-		})
-	})
-}
+	// app.post("/", function(req, res) {
+	// 	request("https://nytimes.com/", function(error, response, html) {
+	// 		var $ = cheerio.load(html);
+	// 		$(".theme-summary").each(function(i, element) {
+	// 			var title = $(element).children("h2").children("a").text();
+	// 			var link = $(element).children("h2").children("a").attr("href");
+	// 			var articleSummary = $(element).children(".summary").text()
+	// 				if (title && link && articleSummary) {
+	// 					db.scrapedData.insert({
+	// 						title: title,
+	// 						link: link,
+	// 						articleSummary: articleSummary
+	// 					},
+	// 				function(err, inserted) {
+	// 					if (err) {
+	// 						console.log(err)
+	// 					}
+	// 					else {
+	// 						console.log(inserted);
+	// 					}
+	// 					});
+	// 				}
+	// 		});
+	// 	})
+	// 	db.scrapedData.find({}, function(error,articles){
+	// 		res.render("home", {"articles":articles})
+	// 	})
+	}
+
 
 
