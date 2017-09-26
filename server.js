@@ -4,11 +4,13 @@ var exphbs = require("express-handlebars");
 var request = require("request");
 var cheerio = require("cheerio");
 var mongojs = require("mongojs");
+var mongoose = require("mongoose");
 
 // Initialize Express
 var app = express();
 var PORT = process.env.PORT || 8080;
-// var db = require("./models");
+
+mongoose.connect('mongodb://heroku_dntx5x7z:5o71sq1jmintjnkaoekm44reu3@ds149974.mlab.com:49974/heroku_dntx5x7z')
 
 // Static directory
 app.use(express.static("public"));
